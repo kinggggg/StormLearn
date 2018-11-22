@@ -27,7 +27,7 @@ public class CallLogCounterBolt implements IRichBolt {
     }
 
     public void execute(Tuple tuple) {
-        System.out.println("Bolt2.execute()");
+//        System.out.println("Bolt2.execute()");
         String call = tuple.getString(0);
         Integer duration = tuple.getInteger(1);
         if (!counterMap.containsKey(call)) {
@@ -41,7 +41,7 @@ public class CallLogCounterBolt implements IRichBolt {
 
     public void cleanup() {
         for (Map.Entry<String, Integer> entry : counterMap.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+            System.out.println("Call Counter ===> " + entry.getKey() + " : " + entry.getValue());
         }
     }
 

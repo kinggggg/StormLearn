@@ -51,7 +51,7 @@ public class FakeCallLogReaderSpout implements IRichSpout {
                 }
                 Integer duration = randomGenerator.nextInt(60);
 
-                System.out.println("Spout.emit: " + fromMobileNumber + ", " + toMobileNumber + "," + duration);
+//                System.out.println("Spout.emit: " + fromMobileNumber + ", " + toMobileNumber + "," + duration);
                 this.collector.emit(new Values(fromMobileNumber, toMobileNumber, duration));
             }
         }

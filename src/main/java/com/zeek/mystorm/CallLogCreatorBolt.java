@@ -31,7 +31,7 @@ public class CallLogCreatorBolt implements IRichBolt {
         String to = tuple.getString(1);
         Integer duration = tuple.getInteger(2);
 
-        System.out.println("Bolt1.execute:" + from + ", " + to + ", " +  duration);
+//        System.out.println("Bolt1.execute:" + from + ", " + to + ", " +  duration);
         collector.emit(new Values(from + " - " + to, duration));
     }
 
