@@ -7,6 +7,9 @@ import org.apache.storm.trident.testing.FixedBatchSpout;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @ClassName FixBatchApp
  * @Description
@@ -27,12 +30,12 @@ public class FixBatchApp {
 
         TridentTopology top = new TridentTopology();
         top.newStream("tx-1", spout)
-                .shuffle().each(new Fields("a", "b"), null).parallelismHint(2);
+                .shuffle().each(new Fields("a", "b"), new Filter1()).parallelismHint(2);
 
         Config config = new Config();
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("StormApp", config, top.build());
-        Thread.sleep(10000);
+        Thread.sleep(100000);
         cluster.shutdown();
 
     }
