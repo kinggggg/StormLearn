@@ -30,12 +30,15 @@ public class FixBatchApp {
 
         TridentTopology top = new TridentTopology();
         top.newStream("tx-1", spout)
-                .shuffle().each(new Fields("a", "b"), new Filter1()).parallelismHint(2);
+                //创建2个task，由于Filter1采取的是随机的分组策略，Filter1的两个实例均会收到数据
+                .shuffle().each(new Fields("a", "b"), new Filter1()).parallelismHint(2)
+                //创建3个task，由于Filter2采取的 global的分组策略，只有一个Filter2的实例会收到数据
+                .global().each(new Fields("a", "b"), new Filter2()).parallelismHint(3);
 
         Config config = new Config();
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("StormApp", config, top.build());
-        Thread.sleep(100000);
+        Thread.sleep(10000000);
         cluster.shutdown();
 
     }
