@@ -17,11 +17,9 @@ public class CheckEvenSumFilter extends BaseFilter {
         int b = tuple.getInteger(1);
 //        int c = tuple.getInteger(2);
 //        int d = tuple.getInteger(3);
-        System.out.println("=============>");
-        System.out.println("=============> a = " + a + ", b = " + b);
-        System.out.println("=============>");
         int sum = a + b;
         if(sum % 2 == 0) {
+            System.out.println("=============> a = " + a + ", b = " + b);
             return true;
         }
         return false;

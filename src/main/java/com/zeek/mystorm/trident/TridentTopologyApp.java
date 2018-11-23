@@ -40,15 +40,17 @@ public class TridentTopologyApp {
 
         // 创建流
         Stream s = top.newStream("spout", testSpout);
-        s.shuffle().each(new Fields("a","b"), new CheckEvenSumFilter()).parallelismHint(2);
+        // shuffle分组
+        s.shuffle().each(new Fields("a", "b"), new CheckEvenSumFilter()).parallelismHint(2)
+        .shuffle().each(new Fields("a", "b"), new SumFunction(), new Fields("sum")).parallelismHint(2);
 
         //本地集群模式
         LocalCluster cluster = new LocalCluster();
         cluster.submitTopology("StormApp", config, top.build());
 
         testSpout.feed(ImmutableList.of(new Values(1, 2, 3, 4)));
-        testSpout.feed(ImmutableList.of(new Values(2, 3, 4, 5)));
-        testSpout.feed(ImmutableList.of(new Values(3, 4, 5, 6)));
+        testSpout.feed(ImmutableList.of(new Values(2, 2, 4, 5)));
+        testSpout.feed(ImmutableList.of(new Values(4, 4, 5, 6)));
         testSpout.feed(ImmutableList.of(new Values(4, 5, 6, 7)));
 
         Thread.sleep(10000);

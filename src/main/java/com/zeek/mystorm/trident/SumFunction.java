@@ -17,10 +17,10 @@ public class SumFunction extends BaseFunction {
 
     public void execute(TridentTuple tuple, TridentCollector
             collector) {
-        int number1 = tuple.getInteger(0);
-        int number2 = tuple.getInteger(1);
-        int sum = number1 + number2;
-// emit the sum of first two fields
+        int a = tuple.getInteger(0);
+        int b = tuple.getInteger(1);
+        int sum = a + b;
+        System.out.println("sum =============> a = " + a + ", b = " + b + ", sum = " + sum);
         collector.emit(new Values(sum));
     }
 }
