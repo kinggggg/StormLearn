@@ -42,7 +42,7 @@ public class TridentTopologyApp {
         Stream s = top.newStream("spout", testSpout);
         // shuffle分组
         s.shuffle().each(new Fields("a", "b"), new CheckEvenSumFilter()).parallelismHint(2)
-        .shuffle().each(new Fields("a", "b"), new SumFunction(), new Fields("sum")).parallelismHint(2)
+        .shuffle().each(new Fields("a", "b"), new SumFunction(), new Fields("sum")).parallelismHint(2) //注意：虽然只写了两个字段a和b，是说SumFunction中能获取到的字段为a和b，并不表示c和d没有发送
         .shuffle().each(new Fields("a", "b", "c", "d", "sum"), new AvgFunction(), new Fields("avg")).parallelismHint(2);
 
         //本地集群模式
