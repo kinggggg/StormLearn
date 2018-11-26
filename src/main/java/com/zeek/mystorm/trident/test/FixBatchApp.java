@@ -49,6 +49,7 @@ public class FixBatchApp {
                 //按照字段a进行分区
                 .partitionBy(new Fields("a")).each(new Fields("a", "b"), new MyFunction(), new Fields("none")).parallelismHint(2)
                 .partitionAggregate(new Fields("a"), new Count(), new Fields("count")) //分区聚合 在批次之上，分区之下进行个数统计（按照分区进行聚合）
+//                .aggregate(new Fields("a"), new Count(), new Fields("count")) //批次聚合
                 .broadcast().each(new Fields("count"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
 
         Config config = new Config();
