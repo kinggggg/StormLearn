@@ -1,5 +1,6 @@
 package com.zeek.mystorm.trident.test;
 
+import com.zeek.mystorm.trident.aggregate.AvgBatchAsAggregator;
 import com.zeek.mystorm.trident.aggregate.Sum;
 import com.zeek.mystorm.trident.aggregate.SumAsAggregator;
 import org.apache.storm.Config;
@@ -52,8 +53,9 @@ public class FixBatchApp {
                 .partitionBy(new Fields("a")).each(new Fields("a", "b"), new MyFunction(), new Fields("none")).parallelismHint(2)
 //                .partitionAggregate(new Fields("a"), new Count(), new Fields("count")) //分区聚合 在批次之上，分区之下进行个数统计（按照分区进行聚合）
 //                .aggregate(new Fields("a", "b"), new Sum(), new Fields("sum")) //批次聚合 The ReducerAggregator interface first runs the global repartitioning operation on the input stream to combine all the partitions of the same batch into a single partition, and then runs the aggregation function on each batch
-                .aggregate(new Fields("a", "b"), new SumAsAggregator(), new Fields("sum")) // 批次聚合
-                .broadcast().each(new Fields("sum"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
+//                .aggregate(new Fields("a", "b"), new SumAsAggregator(), new Fields("sum")) // 批次聚合
+                .aggregate(new Fields("a", "b"), new AvgBatchAsAggregator(), new Fields("avg")) // 批次聚合 同SumAsAggregator
+                .broadcast().each(new Fields("avg"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
 
         Config config = new Config();
         LocalCluster cluster = new LocalCluster();
