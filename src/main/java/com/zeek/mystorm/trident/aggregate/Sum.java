@@ -20,6 +20,7 @@ public class Sum implements ReducerAggregator<Long> {
 
     //Iterates on the input tuples, calculate the sum and
     //produce the single tuple with single field as output
+    // curr作为反复使用的值变量
     public Long reduce(Long curr, TridentTuple tuple) {
         return curr + tuple.getInteger(0) + tuple.getInteger(1);
     }
