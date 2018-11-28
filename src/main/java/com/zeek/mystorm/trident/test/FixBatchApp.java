@@ -9,6 +9,7 @@ import org.apache.storm.LocalCluster;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.operation.builtin.Count;
 import org.apache.storm.trident.testing.FixedBatchSpout;
+import org.apache.storm.trident.testing.MemoryMapState;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 
@@ -56,8 +57,10 @@ public class FixBatchApp {
 //                .aggregate(new Fields("a", "b"), new Sum(), new Fields("sum")) //批次聚合 The ReducerAggregator interface first runs the global repartitioning operation on the input stream to combine all the partitions of the same batch into a single partition, and then runs the aggregation function on each batch
 //                .aggregate(new Fields("a", "b"), new SumAsAggregator(), new Fields("sum")) // 批次聚合
 //                .aggregate(new Fields("a", "b"), new AvgBatchAsAggregator(), new Fields("avg")) // 批次聚合 同SumAsAggregator
-                .aggregate(new Fields("a", "b"), new SumCombinerAggregator(), new Fields("avg")) // 批次聚合
-                .broadcast().each(new Fields("avg"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
+//                .aggregate(new Fields("a", "b"), new SumCombinerAggregator(), new Fields("avg")) // 批次聚合
+                .persistentAggregate(new MemoryMapState.Factory(), new Fields("a"),new Count(),new Fields("count")) // 操作的是所有分区的所有tuple
+                .newValuesStream()
+                .broadcast().each(new Fields("count"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
 
         Config config = new Config();
         LocalCluster cluster = new LocalCluster();
