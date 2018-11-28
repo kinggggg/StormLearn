@@ -58,7 +58,7 @@ public class FixBatchApp {
 //                .aggregate(new Fields("a", "b"), new SumAsAggregator(), new Fields("sum")) // 批次聚合
 //                .aggregate(new Fields("a", "b"), new AvgBatchAsAggregator(), new Fields("avg")) // 批次聚合 同SumAsAggregator
 //                .aggregate(new Fields("a", "b"), new SumCombinerAggregator(), new Fields("avg")) // 批次聚合
-                .persistentAggregate(new MemoryMapState.Factory(), new Fields("a"),new Count(),new Fields("count")) // 操作的是所有分区的所有tuple
+                .persistentAggregate(new MemoryMapState.Factory(), new Fields("a"),new Count(),new Fields("count")) // 持久化聚合 操作的是所有分区的所有tuple
                 .newValuesStream()
                 .broadcast().each(new Fields("count"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
 
