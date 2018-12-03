@@ -26,7 +26,7 @@ public class MyLocalDRPC {
 
         cluster.submitTopology("drpc-demo", conf, builder.createLocalTopology(drpc));
 
-        System.out.println("Results for 'hello':" + drpc.execute("exclamation", "1,2"));
+        System.out.println("Results for 'hello':" + drpc.execute("exclamation", "1,2")); //和LinearDRPCTopologyBuilder对应
 
         cluster.shutdown();
         drpc.shutdown();
