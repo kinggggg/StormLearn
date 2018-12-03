@@ -1,20 +1,13 @@
 package com.zeek.mystorm.trident.test;
 
-import com.zeek.mystorm.trident.aggregate.AvgBatchAsAggregator;
-import com.zeek.mystorm.trident.aggregate.Sum;
-import com.zeek.mystorm.trident.aggregate.SumAsAggregator;
-import com.zeek.mystorm.trident.aggregate.SumCombinerAggregator;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.operation.builtin.Count;
+import org.apache.storm.trident.operation.builtin.Sum;
 import org.apache.storm.trident.testing.FixedBatchSpout;
-import org.apache.storm.trident.testing.MemoryMapState;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @ClassName FixBatchApp
@@ -58,9 +51,15 @@ public class FixBatchApp {
 //                .aggregate(new Fields("a", "b"), new SumAsAggregator(), new Fields("sum")) // 批次聚合
 //                .aggregate(new Fields("a", "b"), new AvgBatchAsAggregator(), new Fields("avg")) // 批次聚合 同SumAsAggregator
 //                .aggregate(new Fields("a", "b"), new SumCombinerAggregator(), new Fields("avg")) // 批次聚合
-                .persistentAggregate(new MemoryMapState.Factory(), new Fields("a"),new Count(),new Fields("count")) // 持久化聚合 操作的是所有分区的所有tuple
-                .newValuesStream()
-                .broadcast().each(new Fields("count"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
+//                .persistentAggregate(new MemoryMapState.Factory(), new Fields("a"),new Count(),new Fields("count")) // 持久化聚合 操作的是所有分区的所有tuple
+//                .newValuesStream()
+//                //链式聚合
+//                .chainedAgg()
+//                .partitionAggregate(new Fields("a"), new Count(), new Fields("count"))
+//                .partitionAggregate(new Fields("a"), new Sum(), new Fields("sum")).chainEnd()
+
+
+                .broadcast().each(new Fields("count", "sum"), new PrintFunction(), new Fields("xxx")).parallelismHint(2);
 
         Config config = new Config();
         LocalCluster cluster = new LocalCluster();
